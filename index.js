@@ -1,20 +1,28 @@
 (function () {
     try {
-        var reset = function () {
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-        };
+        var textarea = null;
 
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', function () {
-                requestAnimationFrame(reset);
-            });
-        }
+        document.addEventListener('focusin', function (e) {
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
+                textarea = e.target;
+                setTimeout(function () {
+                    textarea.scrollIntoView({ block: 'end', behavior: 'instant' });
+                }, 50);
+            }
+        });
 
         document.addEventListener('focusout', function () {
-            requestAnimationFrame(reset);
-            setTimeout(reset, 100);
+            textarea = null;
+            requestAnimationFrame(function () {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            });
+            setTimeout(function () {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }, 100);
         });
     } catch (e) {}
 })();
