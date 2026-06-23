@@ -1,11 +1,10 @@
 {
-    "display_name": "平板键盘修复",
+    "display_name": "Tablet Keyboard Fix",
     "loading_order": 99,
     "requires": [],
     "optional": [],
     "js": "index.js",
-    “css”: "",
-    "author": "",
+    "author": "Lumi729",
     "version": "1.0.0",
     "auto_update": false
 }
