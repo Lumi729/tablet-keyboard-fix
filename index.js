@@ -2,8 +2,20 @@
     try {
         if (window.innerWidth < 600 || window.innerWidth >= 1000) return;
 
-        const reset = () => {
+        const apply = () => {
             try {
+                const vv = window.visualViewport;
+                if (!vv) return;
+
+                const keyboardHeight = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+                const topBar = document.querySelector('#top-settings-holder');
+                const topBarHeight = topBar ? topBar.offsetHeight : 56;
+                const formSheld = document.getElementById('form_sheld');
+                const chat = document.getElementById('chat');
+
+                if (formSheld) formSheld.style.bottom = (keyboardHeight + 6) + 'px';
+                if (chat) chat.style.maxHeight = (vv.height - topBarHeight - 10) + 'px';
+
                 window.scrollTo(0, 0);
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
@@ -12,12 +24,13 @@
 
         const init = () => {
             if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', () => setTimeout(reset, 100));
-                window.visualViewport.addEventListener('scroll', () => setTimeout(reset, 100));
-            } else {
-                window.addEventListener('resize', () => setTimeout(reset, 100));
+                window.visualViewport.addEventListener('resize', () => requestAnimationFrame(apply));
+                window.visualViewport.addEventListener('scroll', () => {
+                    window.scrollTo(0, 0);
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                });
             }
-            document.addEventListener('focusout', () => setTimeout(reset, 200));
         };
 
         if (document.readyState === 'loading') {
