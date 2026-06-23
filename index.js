@@ -2,20 +2,11 @@
     try {
         if (window.innerWidth < 600 || window.innerWidth >= 1000) return;
 
-        const apply = () => {
+        const fixHeight = () => {
             try {
-                const vv = window.visualViewport;
-                if (!vv) return;
-
-                const keyboardHeight = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
-                const topBar = document.querySelector('#top-settings-holder');
-                const topBarHeight = topBar ? topBar.offsetHeight : 56;
-                const formSheld = document.getElementById('form_sheld');
-                const chat = document.getElementById('chat');
-
-                if (formSheld) formSheld.style.bottom = (keyboardHeight + 6) + 'px';
-                if (chat) chat.style.maxHeight = (vv.height - topBarHeight - 10) + 'px';
-
+                const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                const sheld = document.getElementById('sheld');
+                if (sheld) sheld.style.height = h + 'px';
                 window.scrollTo(0, 0);
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
@@ -23,14 +14,13 @@
         };
 
         const init = () => {
+            fixHeight();
             if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', () => requestAnimationFrame(apply));
-                window.visualViewport.addEventListener('scroll', () => {
-                    window.scrollTo(0, 0);
-                    document.documentElement.scrollTop = 0;
-                    document.body.scrollTop = 0;
-                });
+                window.visualViewport.addEventListener('resize', () => requestAnimationFrame(fixHeight));
+                window.visualViewport.addEventListener('scroll', () => requestAnimationFrame(fixHeight));
             }
+            window.addEventListener('resize', () => requestAnimationFrame(fixHeight));
+            document.addEventListener('focusout', () => setTimeout(fixHeight, 200));
         };
 
         if (document.readyState === 'loading') {
