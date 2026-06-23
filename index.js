@@ -1,18 +1,29 @@
 (function () {
-    如果 (window.innerWidth < 600 || window.innerWidth >= 1000) 返回;
+    try {
+        if (window.innerWidth < 600 || window.innerWidth >= 1000) return;
 
-    const 重置 = () => {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-    };
+        const reset = () => {
+            try {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            } catch (e) {}
+        };
 
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', () => setTimeout(reset, 50));
-        window.visualViewport.addEventListener('scroll', () => setTimeout(reset, 50));
-    } else {
-        window.addEventListener('resize', () => setTimeout(reset, 50));
-    }
+        const init = () => {
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', () => setTimeout(reset, 100));
+                window.visualViewport.addEventListener('scroll', () => setTimeout(reset, 100));
+            } else {
+                window.addEventListener('resize', () => setTimeout(reset, 100));
+            }
+            document.addEventListener('focusout', () => setTimeout(reset, 200));
+        };
 
-    document.addEventListener('focusout', () => setTimeout(reset, 150));
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    } catch (e) {}
 })();
