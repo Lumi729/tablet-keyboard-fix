@@ -1,27 +1,13 @@
 (function () {
     try {
-        var textarea = null;
-
-        document.addEventListener('focusin', function (e) {
-            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
-                textarea = e.target;
-                setTimeout(function () {
-                    textarea.scrollIntoView({ block: 'end', behavior: 'instant' });
-                }, 50);
-            }
-        });
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (vp && !vp.content.includes('interactive-widget')) {
+            vp.content += ', interactive-widget=resizes-content';
+        }
 
         document.addEventListener('focusout', function () {
-            textarea = null;
-            requestAnimationFrame(function () {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            });
             setTimeout(function () {
                 window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
             }, 100);
         });
     } catch (e) {}
