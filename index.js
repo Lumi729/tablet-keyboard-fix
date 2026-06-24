@@ -11,25 +11,20 @@
             }, 100);
         });
 
-        // 找到锁头白条并修复
-        var fixBar = function () {
-            var all = document.querySelectorAll('*');
-            for (var i = 0; i < all.length; i++) {
-                var el = all[i];
-                if (el.children.length < 5 && el.textContent.includes('单击滑块')) {
-                    el.style.setProperty('position', 'relative', 'important');
-                    el.style.setProperty('z-index', '1', 'important');
-                    // 调试：先用红色确认找对了
-                    el.style.setProperty('background', 'red', 'important');
-                    console.log('找到锁头元素:', el.tagName, el.className, el.id);
-                    break;
+        // 点击屏幕顶部区域时，抓那个位置的元素信息
+        document.addEventListener('click', function (e) {
+            if (e.clientY < 80) {
+                var el = document.elementFromPoint(e.clientX, e.clientY);
+                if (el) {
+                    var info = [];
+                    var cur = el;
+                    while (cur && cur !== document.body) {
+                        info.push(cur.tagName + (cur.id ? '#' + cur.id : '') + (cur.className ? '.' + String(cur.className).split(' ').join('.') : ''));
+                        cur = cur.parentElement;
+                    }
+                    alert(info.join('\n'));
                 }
             }
-        };
-
-        setTimeout(fixBar, 2000);
-        document.addEventListener('click', function () {
-            setTimeout(fixBar, 500);
         });
     } catch (e) {}
 })();
