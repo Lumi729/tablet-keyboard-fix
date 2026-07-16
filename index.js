@@ -11,3 +11,6 @@
         });
     } catch (e) {}
 })();
+document.addEventListener('dblclick', function () {
+    alert('宽度: ' + window.innerWidth + ' 高度: ' + window.innerHeight);
+});
